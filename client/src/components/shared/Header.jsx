@@ -7,7 +7,7 @@ const Header = () => {
 
     return (
         <>
-        <header className='py-2.5 px-8 flex justify-between items-center bg-[#1a1a1a]'>
+        <header className='py-2 px-8 flex justify-between items-center bg-[#1a1a1a]'>
             
             {/* logo */}
             <div className='flex items-center gap-2'>
@@ -20,12 +20,12 @@ const Header = () => {
             </div>
 
             {/* search bar */}
-            <div className='px-5 py-2 flex items-center gap-4 bg-[#1f1f1f] rounded-[15px] w-[500px]'>
-                <FaSearch className='text-[#f5f5f5]' />
-                <input 
-                    type="text" 
-                    placeholder='Search'
-                    className='text-[#f5f5f5] outline-none bg-[#1f1f1f]'
+            <div className="px-5 py-2 flex items-center gap-4 bg-[#1f1f1f] rounded-[15px] w-[500px]">
+                <FaSearch className="text-[#b5b5b5] mr-2" size={14} />
+                <input
+                type="text"
+                placeholder="Search"
+                className="w-full bg-transparent text-[#f5f5f5] placeholder-[#8a8a8a] outline-none"
                 />
             </div>
 
