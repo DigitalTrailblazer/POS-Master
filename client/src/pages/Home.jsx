@@ -30,7 +30,7 @@ const Home = () => {
                 <PopularDishes />
             </div>
 
-            {/* navigations */}
+            {/* bottom_navigations */}
             <BottomNav />
         </section>
     )
