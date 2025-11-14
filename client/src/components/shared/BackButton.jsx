@@ -10,7 +10,7 @@ const BackButton = () => {
     return (
         <button
             onClick={() => navigate(-1)}
-            className='bg-[#025cca] text-white p-2.5 text-xl font-bold rounded-full'
+            className='bg-[#025cca] text-white p-2 text-xl font-bold rounded-full'
         >
             <IoMdArrowBack />
         </button>

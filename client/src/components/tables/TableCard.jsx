@@ -1,11 +1,20 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const TableCard = ({ name, status, initial}) => {
 
+    const navigate = useNavigate()
+    
+    const handleClick = () => {
+        if(status === "Booked"){
+            return 
+        }
+        navigate("/menu")
+    }
 
     return (
         <>
-        <div className='bg-[#262626] w-[270px] rounded-lg mb-3 p-4 cursor-pointer hover:bg-[#1f1f1f]'>
+        <div onClick={handleClick} className='bg-[#262626] w-[270px] rounded-lg mb-3 p-4 cursor-pointer hover:bg-[#1f1f1f]'>
             
             <div className='flex items-center justify-between px-1'>
 
