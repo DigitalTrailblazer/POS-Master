@@ -1,11 +1,11 @@
 import React from 'react'
 
-const TableCard = ({key, name, status, initial}) => {
+const TableCard = ({ name, status, initial}) => {
 
 
     return (
         <>
-        <div key={key} className='bg-[#262626] w-[270px] rounded-lg mb-3 p-4 cursor-pointer hover:bg-[#1f1f1f]'>
+        <div className='bg-[#262626] w-[270px] rounded-lg mb-3 p-4 cursor-pointer hover:bg-[#1f1f1f]'>
             
             <div className='flex items-center justify-between px-1'>
 
