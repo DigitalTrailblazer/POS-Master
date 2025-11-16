@@ -1,20 +1,26 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { updateTable } from '../../redux/slices/customerSlice'
 
-const TableCard = ({ name, status, initial}) => {
+const TableCard = ({ name, status, initial, seats}) => {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     
-    const handleClick = () => {
+    const handleClick = (name) => {
         if(status === "Booked"){
             return 
         }
+
+        dispatch(updateTable({tableNo: name}))
+
         navigate("/menu")
     }
 
     return (
         <>
-        <div onClick={handleClick} className='bg-[#262626] w-[270px] rounded-lg mb-3 p-4 cursor-pointer hover:bg-[#1f1f1f]'>
+        <div onClick={() => handleClick(name)} className='bg-[#262626] w-[270px] rounded-lg mb-3 p-4 cursor-pointer hover:bg-[#1f1f1f]'>
             
             <div className='flex items-center justify-between px-1'>
 
@@ -29,6 +35,10 @@ const TableCard = ({ name, status, initial}) => {
                     {initial}
                 </h1>
             </div>
+
+            <p className='text-[#ababab] text-xs'>
+                Seats : <span className='text-[#f5f5f5]'>{seats}</span>
+            </p>
         </div>
         </>
     )

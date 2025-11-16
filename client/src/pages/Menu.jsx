@@ -7,9 +7,18 @@ import { IoRestaurant } from "react-icons/io5";
 import CartInfo from '../components/menu/CartInfo';
 import CustomerInfo from '../components/menu/CustomerInfo';
 import BillsInfo from '../components/menu/BillsInfo';
+import { useSelector } from 'react-redux';
 
 const Menu = () => {
-  return (
+
+
+    const customerData = useSelector(state => state.customer)
+
+
+
+
+
+    return (
         <section className='bg-[#1f1f1f] h-[calc(100vh-5rem)] overflow-hidden flex gap-3'>
             
             {/* left div */}
@@ -25,8 +34,8 @@ const Menu = () => {
                         <div className='flex items-center gap-3 cursor-pointer'>
                             <IoRestaurant  className='text-[#f5f5f5] text-4xl' />
                             <div className='flex flex-col items-start'>
-                                <h1 className='text-[#f5f5f5] text-md font-semibold'>Customer Name</h1>
-                                <p className='text-[#ababab] text-xs font-medium'>Table No: 01</p>
+                                <h1 className='text-[#f5f5f5] text-md font-semibold'>{customerData.customerName || "Customer Name"}</h1>
+                                <p className='text-[#ababab] text-xs font-medium'>{customerData.tableNo || "N/A"}</p>
                             </div>
                         </div>
                     </div>

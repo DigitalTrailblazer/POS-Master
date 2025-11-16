@@ -3,14 +3,21 @@ import { FaHome } from 'react-icons/fa'
 import { MdOutlineReorder, MdTableBar } from "react-icons/md";
 import { CiCircleMore } from "react-icons/ci";
 import { BiSolidDish } from "react-icons/bi";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from './Modal';
+import { useDispatch } from 'react-redux';
+import { setCustomer } from '../../redux/slices/customerSlice';
 
 const BottomNav = () => {
     const navigate = useNavigate()
+    const location = useLocation()
+    const dispatch = useDispatch()
 
     const [isModelOpen, setIisModelOpen] = useState(false)
     const [guestCount, setGuestCount] = useState(0)
+
+    const [name, setName] = useState()
+    const [phone, setPhone] = useState()
 
     const openModal = () => {
         return setIisModelOpen(true)
@@ -32,13 +39,24 @@ const BottomNav = () => {
         setGuestCount(prev => Math.max(prev-1, 0));
     }
 
+    const isActive = (path) => {
+        return location.pathname === path;
+    }
+
+    const handleCreateOrder = () => {
+        // send data to store
+        dispatch(setCustomer({name, phone, guests: guestCount}))
+
+        navigate("/tables")
+    }
+
 
     return (
-        <div className='p-2 bg-[#262626] fixed bottom-0 left-0 right-0 h-15 flex justify-around'>
+        <div className='p-2 bg-[#262626] fixed bottom-0 left-0 right-0 h-13 flex justify-around'>
 
             <button
                 onClick={() => navigate("/")}
-                className='flex items-center justify-center w-[200px] text-[#f5f5f5] bg-[#343434] rounded-3xl'
+                className={`${isActive("/") ? "text-[#f5f5f5] bg-[#343434]" : "text-[#ababab]"} flex items-center justify-center w-[200px] rounded-3xl`}
             > 
                 <FaHome size={20} className='mr-4 inline' /> 
                 <p className='text-sm sm:text-base' >Home</p>
@@ -46,7 +64,7 @@ const BottomNav = () => {
 
             <button
                 onClick={() => navigate("/orders")}
-                className='flex items-center justify-center w-[200px] text-[#f5f5f5] bg-[#343434] rounded-3xl'
+                className={`${isActive("/orders") ? "text-[#f5f5f5] bg-[#343434]" : "text-[#ababab]"} flex items-center justify-center w-[200px] rounded-3xl`}
             > 
                 <MdOutlineReorder size={20} className='mr-4 inline' /> 
                 <p className='text-sm sm:text-base' >Orders</p>
@@ -54,14 +72,14 @@ const BottomNav = () => {
 
             <button
                 onClick={() => navigate("/tables")}
-                className='flex items-center justify-center w-[200px] text-[#f5f5f5] bg-[#343434] rounded-3xl'
+                className={`${isActive("/tables") ? "text-[#f5f5f5] bg-[#343434]" : "text-[#ababab]"} flex items-center justify-center w-[200px] rounded-3xl`}
             > 
                 <MdTableBar size={20} className='mr-4 inline' /> 
                 <p className='text-sm sm:text-base' >Tables</p>
             </button>
 
             <button
-                className='flex items-center justify-center w-[200px] text-[#f5f5f5] bg-[#343434] rounded-3xl'
+                className={`${isActive("/more") ? "text-[#f5f5f5] bg-[#343434]" : "text-[#ababab]"} flex items-center justify-center w-[200px] rounded-3xl`}
             > 
                 <CiCircleMore size={20} className='mr-4 inline' /> 
                 <p className='text-sm sm:text-base' >More</p>
@@ -69,8 +87,9 @@ const BottomNav = () => {
 
 
             <button
+                disabled={!(isActive("/") || isActive("/orders"))}
                 onClick={openModal}
-                className='cursor-pointer p-3 bg-[#F6B100] text-[#f5f5f5] rounded-full items-center absolute bottom-7'
+                className='cursor-pointer p-3 bg-[#F6B100] text-[#f5f5f5] rounded-full items-center absolute bottom-6'
             >
                 <BiSolidDish size={30} />
             </button>
@@ -83,6 +102,9 @@ const BottomNav = () => {
                     <div className='flex items-center bg-[#1f1f1f] rounded px-4 p-3'>
                         <input 
                             type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+
                             name=''
                             placeholder='Enter customer name'
                             id=''
@@ -96,6 +118,9 @@ const BottomNav = () => {
                     <div className='flex items-center bg-[#1f1f1f] rounded px-4 p-3'>
                         <input 
                             type="tel"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+
                             name=''
                             placeholder='+91-9999999999'
                             id=''
@@ -114,7 +139,7 @@ const BottomNav = () => {
                 </div>
 
                 <button 
-                    onClick={() => navigate("/tables")}
+                    onClick={handleCreateOrder}
                     className='w-full mt-8 py-2 text-[#f5f5f5] bg-[#f6B100] hover:bg-[#c99206] rounded-lg cursor-pointer'
                 >
                     Create Order
