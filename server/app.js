@@ -4,9 +4,15 @@ const express = require("express")
 const connectDB = require("./config/database.js");
 const globalErrorHandler = require("./middlewares/globalErrorHandler.js");
 const createHttpError = require("http-errors");
+const userRoute = require("./routes/userRoutes.js");
 
 const app = express()
 connectDB()
+
+// MIDDLEWARES
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 
 // ROUTES
@@ -20,8 +26,8 @@ app.get("/", (req, res) => {
 })
 
 
-
-
+// Auth Endpoints
+app.use("/api/user", userRoute)
 
 
 
