@@ -15,7 +15,7 @@ const register = async (req, res, next) => {
 
         const isUserPresent = await User.findOne( {email} )
         if(isUserPresent){
-            const error = createHttpError(400, "User already exist")
+            const error = createHttpError(409, "User already exist")
             return next(error)
         }
 
@@ -41,6 +41,7 @@ const register = async (req, res, next) => {
         next(error)
     }
 }
+
 
 const login = async (req, res, next) => {
     
