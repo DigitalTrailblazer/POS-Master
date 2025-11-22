@@ -111,7 +111,7 @@ const login = async (req, res, next) => {
 const getUserData = async (req, res, next) => {
     try {
         
-        const user = await User.findById(req.user._id).select("-password")
+        const user = await User.findById(req.user._id).select("-password").lean()
 
         if(!user){
             const error = createHttpError(404, "User not found")
