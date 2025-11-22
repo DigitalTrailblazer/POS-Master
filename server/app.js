@@ -4,7 +4,9 @@ const express = require("express")
 const connectDB = require("./config/database.js");
 const globalErrorHandler = require("./middlewares/globalErrorHandler.js");
 const createHttpError = require("http-errors");
-const userRoute = require("./routes/userRoutes.js");
+const userRoutes = require("./routes/userRoutes.js");
+const orderRoutes = require("./routes/orderRoutes.js");
+const cookieParser = require("cookie-parser");
 
 const app = express()
 connectDB()
@@ -12,6 +14,7 @@ connectDB()
 // MIDDLEWARES
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
 
 
 
@@ -27,7 +30,8 @@ app.get("/", (req, res) => {
 
 
 // Auth Endpoints
-app.use("/api/user", userRoute)
+app.use("/api/user", userRoutes)
+app.use("/api/order", orderRoutes)
 
 
 
