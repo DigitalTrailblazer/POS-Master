@@ -53,8 +53,14 @@ const addOrder = async (req, res, next) => {
 const getOrderByID = async (req, res, next) => {
     
     try {
-        const ID = req.params.id 
         const order = await Order.findById(ID).lean()
+        const ID = req.params.id
+        
+        if(! mongoose.Types.ObjectId.isValid(ID)){
+            // means ID is not valid
+            const error = createHttpError(404, "Invalid ID")
+            return next(error)
+        } 
 
         if(!order){
             const error = createHttpError(404, "Order not found")
@@ -92,6 +98,12 @@ const updateOrder = async (req, res, next) => {
     try {
         const {orderStatus} = req.body
         const ID = req.params.id
+        
+        if(! mongoose.Types.ObjectId.isValid(ID)){
+            // means ID is not valid
+            const error = createHttpError(404, "Invalid ID")
+            return next(error)
+        }
 
         // const validStatuses = ["pending", "processing", "completed", "cancelled"];
 
