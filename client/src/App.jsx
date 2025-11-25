@@ -1,5 +1,5 @@
 import  React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Orders from "./pages/Orders";
@@ -10,10 +10,12 @@ import NotFound from "./components/shared/NotFound";
 
 function App() {
 
+    const location = useLocation()
+    const hideHeaderRoutes = ["/auth"]
 
     return (
        <>
-            <Header />
+            {!hideHeaderRoutes.includes(location.pathname) && <Header />}
         
             <Routes>
             <Route path="/" element={<Home />} />
