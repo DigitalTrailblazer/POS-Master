@@ -34,7 +34,7 @@ const register = async (req, res, next) => {
         await newUser.save()
 
         // remove password before sending it to the response
-        const safeUser = user.toObject()
+        const safeUser = { ...(user._doc || user) }
         delete safeUser.password
 
         res.status(201).json({
@@ -53,9 +53,11 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => { 
     try {
 
-        const {email, password, role} = req.body
+        const {email, password} = req.body
+        console.log("BODY", req.body)
+
         
-        if(!email || !password || !role){
+        if(!email || !password){
             const error = createHttpError(400, "All fields are required")
             return next(error)
         }
@@ -91,12 +93,7 @@ const login = async (req, res, next) => {
             success : true,
             message : "User Logged-in Successfully",
             accessToken,
-            user: {
-                id: isUserPresent._id,
-                name: isUserPresent.name,
-                email: isUserPresent.email,
-                role: isUserPresent.role
-            }
+            user: isUserPresent
         })
     } 
     catch (error) {
@@ -130,6 +127,20 @@ const getUserData = async (req, res, next) => {
     }
 }
 
+const logout = async (req, res, next) => {
+    try {
+        res.clearCookie('accessToken')
+
+        res.status(200).json({
+            success : true,
+            message : "Logout Successfully"
+        })
+    } 
+    catch (error) {
+        next(error)
+    }
+}
 
 
-module.exports = {register, login, getUserData}
+
+module.exports = {register, login, getUserData, logout}
