@@ -1,6 +1,15 @@
 import React, { useState } from 'react'
+import {useMutation} from '@tanstack/react-query'
+import { login } from '../../https'
+import {useDispatch} from 'react-redux'
+
+import {enqueueSnackbar} from 'notistack'
+import { setUser } from '../../redux/slices/userSlice'
+import {useNavigate} from 'react-router-dom'
 
 const Login = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [showPassword, setShowPassword] = useState(false)
     const [formData, setFormData] = useState({
@@ -22,14 +31,45 @@ const Login = () => {
     const handleFormSubmit = (e) => {
 
         e.preventDefault()
-        console.log(formData)
+        // console.log(formData)
+        loginMutation.mutate(formData)
 
-        setFormData({
-            email : "",
-            password : ""
-        })
-        setShowPassword(false)
+        // setFormData({
+        //     email : "",
+        //     password : ""
+        // })
+        // setShowPassword(false)
     }
+
+    // LOGIN
+    const loginMutation = useMutation({
+        
+        mutationFn : (reqData) => {
+            return login(reqData)
+        },
+
+        onSuccess : (resData) => {
+            const data = resData.data.user
+            console.log("user-data", data)
+
+            dispatch(setUser({
+                _id: data._id,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                role: data.role
+            }))
+
+            navigate("/")
+            enqueueSnackbar(data.message, { variant: "success" })
+        },
+
+        onError : (error) =>{
+            // console.log(error.response?.data || error.message)
+            const {response} = error
+            enqueueSnackbar(response.data?.message, {variant : "error"})
+        }
+    })
 
     return (
         <div>
@@ -66,6 +106,14 @@ const Login = () => {
                             placeholder='Enter password'
                             className='bg-transparent flex-1 text-white focus:outline-none'
                         />
+
+                        <button
+                            type="button"
+                            onClick={togglePasswordVisibility}
+                            className="ml-2 text-gray-400 hover:text-white"
+                        >
+                            {showPassword ? "🙈" : "👁️"}
+                        </button>
                     </div>
                 </div>
 

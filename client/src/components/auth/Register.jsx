@@ -1,6 +1,14 @@
+import { useMutation } from '@tanstack/react-query'
 import React, { useState } from 'react'
+import { register } from '../../https'
+import { enqueueSnackbar } from 'notistack'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
-const Register = () => {
+const Register = ({ setIsRegister }) => {
+
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     
     const [showPassword, setShowPassword] = useState(false)
     const [formData, setFormData] = useState({
@@ -30,7 +38,8 @@ const Register = () => {
     const handleFormSubmit = (e) => {
         
         e.preventDefault()
-        console.log(formData)
+
+        registerMutation.mutate(formData)
 
         setFormData({
         name : "", 
@@ -41,6 +50,32 @@ const Register = () => {
         })
         setShowPassword(false)
     }
+
+
+    // REGISTER
+    const registerMutation = useMutation({
+        mutationFn: (reqData) => {
+            return register(reqData)
+        },
+
+        onSuccess: (resData) => {
+            const {data} = resData
+            console.log(data)
+
+            enqueueSnackbar(data.message, { variant: "success" })
+
+            setTimeout(() => {
+
+                setIsRegister(false)
+            }, 1000)
+            // navigate("/login")
+        },
+
+        onError: (error) => {
+            const {response} = error
+            enqueueSnackbar(response.data?.message, {variant: "error"})
+        }
+    })
     
     return (
         <div>
