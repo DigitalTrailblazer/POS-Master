@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import BottomNav from '../components/shared/BottomNav'
 import BackButton from '../components/shared/BackButton'
 import TableCard from '../components/tables/TableCard'
+import {keepPreviousData, useQuery} from '@tanstack/react-query'
+import { getTables } from '../https'
+import { enqueueSnackbar } from 'notistack'
 
 
 const tables = [
@@ -31,6 +34,23 @@ const tables = [
 const Tables = () => {
 
     const[status, setStatus] = useState("all")
+
+    const {data:resData, error} = useQuery({
+
+        queryKey: ["tables"],
+
+        queryFn: async () => {
+            return await getTables()
+        },
+
+        placeholderData: keepPreviousData
+    }) 
+    if(error){
+        enqueueSnackbar("Something went wrong", {variant : "error"})
+    }
+
+    console.log("tables_data", resData)
+    console.log("need", resData?.data.data)
 
     return (
         <section className='bg-[#1f1f1f] h-[calc(100vh-5rem)] overflow-hidden'>
@@ -67,16 +87,18 @@ const Tables = () => {
 
             </div>
 
-            <div className='px-12 py-3 flex flex-wrap gap-5 overflow-y-scroll h-[calc(100vh-12rem)] no-scrollbar'>
-                {
-                    tables.map((table) => {
+            <div className='px-12 py-3 flex items-start content-start flex-wrap gap-5 overflow-y-scroll h-[calc(100vh-12rem)] no-scrollbar'>
+                {   
+                    Array.isArray(resData?.data?.data) &&
+                    resData?.data.data.map((table) => {
                         return (
                             <TableCard 
-                                key={table.id} 
-                                id={table.id}
-                                name={table.name} 
+                                key={table._id}
+                                id={table._id}
+                                name={table.tableNo} 
                                 status={table.status} 
-                                initial={table.initial} 
+                                initial={table.currentOrder?.customerDetails.name} 
+                                // initial="AM" 
                                 seats={table.seats}
                             />
                         )
