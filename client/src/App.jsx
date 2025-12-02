@@ -10,6 +10,7 @@ import NotFound from "./components/shared/NotFound";
 import useLoadData from "./hooks/useLoadData";
 import Loader from "./components/shared/Loader";
 import { useSelector } from "react-redux";
+import Dashboard from "./pages/Dashboard";
 
 
 function ProtectedRoute({ children }){
@@ -68,6 +69,14 @@ function App() {
                 element={
                     <ProtectedRoute>
                         <Menu />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/dashboard"
+                element={
+                    <ProtectedRoute>
+                        <Dashboard/>
                     </ProtectedRoute>
                 }
             />
