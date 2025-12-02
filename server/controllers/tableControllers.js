@@ -6,12 +6,7 @@ const mongoose = require("mongoose")
 const addTable = async (req, res, next) => {
 
     try {
-        const {tableNo} = req.body
-
-        if(!tableNo === undefined || tableNo === null){
-            const error = createHttpError(400, "Please provide table number")
-            return next(error)
-        }
+        const {tableNo, seats} = req.body
 
         // CHECK IF tableNo ALREADY EXISTS OR NOT
         const isTablePresent = await Table.findOne( {tableNo} )
@@ -22,7 +17,8 @@ const addTable = async (req, res, next) => {
 
         // SAVE INTO DATABASE
         const newTable = await Table.create({
-            tableNo
+            tableNo,
+            seats
         })
 
         res.status(201).json({
@@ -39,7 +35,10 @@ const addTable = async (req, res, next) => {
 const getAllTables = async (req, res, next) => {
 
     try {
-        const tables = await Table.find()
+        const tables = await Table.find().populate({
+            path : "currentOrder",
+            select : "customerDetails"
+        })
 
         res.status(200).json({
             success : true,
