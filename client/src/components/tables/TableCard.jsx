@@ -15,14 +15,19 @@ const TableCard = ({ id, name, status, initial, seats}) => {
             return 
         }
 
-        dispatch(updateTable({tableNo: name}))
+        const table = {
+            
+            tableId: id,
+            tableNo: name
+        }
 
+        dispatch(updateTable( {table} ))
         navigate("/menu")
     }
 
     return (
         <>
-        <div onClick={() => handleClick(name)} className='bg-[#262626] w-[270px] rounded-lg mb-3 p-4 cursor-pointer hover:bg-[#1f1f1f]'>
+        <div onClick={() => handleClick(name)} key={id} className='bg-[#262626] w-[270px] rounded-lg mb-3 p-4 cursor-pointer hover:bg-[#1f1f1f]'>
             
             <div className='flex items-center justify-between px-1'>
 
